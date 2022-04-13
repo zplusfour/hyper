@@ -1,7 +1,24 @@
+<script context="module">
+	import * as c from "../db/enc";
+	export async function load({ session }) {
+		if (!session?.token) {
+			return {
+				status: 302,
+				redirect: '/signin',
+			};
+		}
+		return {
+			props: {
+				user: c.encrypt(session.token),
+			},
+		};
+	}
+</script>
+
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
 	integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
-	crossorigin="anonymous"></script>
+	crossorigin="anonymous">export let user;</script>
 
 <svelte:head>
 	<link
@@ -15,3 +32,10 @@
 		href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
 	/>
 </svelte:head>
+
+
+{#if user}
+	<h1>hi {user}</h1>
+{:else}
+	<h1>login pls</h1>
+{/if}
