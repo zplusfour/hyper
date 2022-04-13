@@ -9,34 +9,30 @@ export const post: RequestHandler = async ({ request }) => {
   var username = form[0][1];
   var password = form[1][1];
 
-  const user = await User.findOne({ username });
-  if (user) {
-    if (password === c.decrypt(user.password)) {
+  const user = await User.findOne({ username: c.encrypt(username) });
+  if (!user) {
+    return {
+      status: 401,
+      body: {
+        error: "Invalid username or password",
+      },
+    };
+  } else {
+    if (c.decrypt(user.password) === password) {
+      const token = c.encrypt(user.username);
       return {
-        status: 302,
+        status: 200,
         headers: {
-          Location: "/",
-          "Set-Cookie": serialize("username", username, {
-            path: "/",
+          "Set-Cookie": serialize("token", token, {
             httpOnly: true,
-            sameSite: "strict",
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 60 * 60 * 24 * 7 // one week
-          })
-        }
-      };
-    } else {
-      return {
+            maxAge: 60 * 60 * 24 * 7,
+            path: "/",
+          }),
+        },
         body: {
-          error: "Incorrect password"
-        }
+          token,
+        },
       };
     }
-  } else {
-    return {
-      body: {
-        error: "Username does not exist"
-      }
-    };
   }
 };

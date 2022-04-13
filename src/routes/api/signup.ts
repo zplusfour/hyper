@@ -28,11 +28,11 @@ export const post: RequestHandler = async ({ request }) => {
 		status: 302,
 		headers: {
 			Location: '/',
-			'Set-Cookie': serialize('username', username, {
+			'Set-Cookie': serialize('token', c.encrypt(username), {
 				path: '/',
 				httpOnly: true,
 				sameSite: 'strict',
-				secure: process.env.NODE_ENV === 'production',
+				secure: true,
 				maxAge: 60 * 60 * 24 * 7 // one week
 			})
 		}
