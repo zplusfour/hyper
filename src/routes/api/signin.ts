@@ -7,10 +7,10 @@ import { serialize } from 'cookie';
 export const post: RequestHandler = async ({ request }) => {
 	const data: any = await request.formData();
 	const form = [...data.entries()];
-	var username = form[0][1];
+	var username = c.encrypt(form[0][1]);
 	var password = form[1][1];
 
-	const user = await User.findOne({ username: c.encrypt(username) });
+	const user = await User.findOne({ username });
   console.log(user);
   // console.log(username === c.decrypt(user.username));
 	if (!user) {

@@ -3,8 +3,9 @@
 	export async function load({ session }) {
 		if (!session?.token) {
 			return {
-				status: 302,
-				redirect: '/signin',
+				props: {
+					session: null
+				}
 			};
 		}
 		return {
@@ -34,8 +35,19 @@
 </svelte:head>
 
 
-{#if user}
+<!-- {#if user}
 	<h1>hi {user}</h1>
 {:else}
 	<h1>login pls</h1>
-{/if}
+{/if} -->
+
+<img src="/hyper.png" alt="idk something poopy" class="image" />
+
+<style>
+	.image {
+  	display: block;
+  	margin-left: auto;
+  	margin-right: auto;
+  	width: 50%;
+	}
+</style>
